@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+</head>
+<link href="css.css" rel="stylesheet" type="text/css"/>
+<body>
+    <div class="box">
+        <div class="title">
+            To do list
+        </div>
+        <div id="toDoList">
+
+            <div>
+                <div class="title" style="font-size: 16px">Unfinished</div>
+                <div class="boxSon" id="to-do-list"></div>
+            </div>
+            <div>
+                <div class="title" style="font-size: 16px">Finished</div>
+                <div class="boxSon" id="finished-list"></div>
+            </div>
+        </div>
+
+    </div>
+<!--    <div id="root"></div>-->
+
+    <script src="vue.global.js"></script>
+    <script>
+        var list = ["Vue","React"];
+        var listFinish = ["smoking","drinking"]
+        var Index = [0,1]
+        var listFinishIndex = [0,1]
+        Vue.createApp({
+            data(){
+                return{
+                    list,
+                    listFinish,
+                    newEvent: "",
+                    Index,
+                    listFinishIndex,
+                }
+            },
+            methods:{
+                add(){
+                    this.list.push(this.newEvent);
+                    this.newEvent = "";
+                },
+                finishEvent(id){
+                    // const btnId = this.class;
+                    var finishEventName =  list[id]
+                    this.listFinish.push(finishEventName);
+                    this.list.splice(id,1);
+                },
+                deleteEvent(id){
+                    this.list.splice(id,1);
+                },
+                deleteFinishEvent(id){
+                    this.listFinish.splice(id,1);
+                }
+
+            },
+            template:`
+              <div class="newEvent-add">
+                 <button id="add" class="button" type="button" v-on:click="add">Add</button>
+                 <span style="padding: 10px;padding-bottom: 0px;background: #2C2B2A"></span>
+                 <input id="newEvent-input" type="text" placeholder="New To-Do" v-model="newEvent">
+              </div>
+              <ul>
+                 <li v-for="(item,index) of list">
+                    <span contenteditable="true" v-bind:id="'event-' + index" onblur="edit(this.id)" >{{item}}</span>
+<!--                    <button v-bind:id="'eventFinish-'+index" v-on:click="finishEvent(this.class)">Finish</button>-->
+                    <button v-bind:id="'eventDelete-'+index" v-on:click="deleteEvent(this.class)">Delete</button>
+                 </li>
+              </ul>
+
+              `
+        }).mount('#toDoList')
+
+        // }).mount('#root');
+        function edit(id){
+            list[id] = document.getElementById(id).innerText.toString();
+        }
+    </script>
+</body>
+</html>
